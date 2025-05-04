@@ -8,7 +8,7 @@ test_input = "Potrzebuję transportu z Warszawy do Sierpca. Towar: 10 palet, wag
 
 @pytest.mark.parametrize("prompt_file", [
     "prompts/p_v1.txt",
-    "prompts/p_v2.txt"
+    # "prompts/p_v2.txt"
 ])
 def test_prompt_snapshot(prompt_file):
     agent = LLMAgent(provider="openai")

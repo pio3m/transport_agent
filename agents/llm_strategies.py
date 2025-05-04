@@ -1,12 +1,24 @@
 from abc import ABC, abstractmethod
 import json
 import requests
+import logging
 from typing import Dict, Any
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    filename='llm_responses.log'
+)
+logger = logging.getLogger('llm_strategies')
 
 class LLMStrategy(ABC):
     @abstractmethod
     def generate_response(self, prompt: str, system_message: str, model_name: str) -> Dict[str, Any]:
         pass
+
+    def _log_response(self, provider: str, raw_response: str):
+        logger.info(f"Provider: {provider}\nRaw Response:\n{raw_response}\n{'='*50}")
 
 class OpenAIStrategy(LLMStrategy):
     def __init__(self, api_key: str):
@@ -30,6 +42,7 @@ class OpenAIStrategy(LLMStrategy):
         response.raise_for_status()
         result = response.json()
         content = result["choices"][0]["message"]["content"]
+        self._log_response("OpenAI", content)
         return json.loads(content)
 
 class OllamaStrategy(LLMStrategy):
@@ -48,4 +61,5 @@ class OllamaStrategy(LLMStrategy):
         response.raise_for_status()
         result = response.json()
         content = result.get("response", "").strip()
+        self._log_response("Ollama", content)
         return json.loads(content) 
