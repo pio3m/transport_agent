@@ -14,6 +14,10 @@ class Settings(BaseModel):
     # CORS
     ALLOWED_ORIGINS: List[str] = ["*"]
     
+    OLLAMA_MODEL: str = 'mistral'
+    LLM_PROVIDER: str ='openai'
+    # LLM_PROVIDER: str ='ollama'
+
     # API Keys
     LLM_API_KEY: str = os.getenv("LLM_API_KEY", "")
     DISTANCE_API_KEY: str = os.getenv("DISTANCE_API_KEY", "")

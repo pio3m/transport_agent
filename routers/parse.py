@@ -2,8 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 import os
 from typing import Any, Dict
+from datetime import date
 
-from schemas.structured_output import ParseRequest, ParseResponse, TransportRequest
+from schemas.structured_output import ParseRequest, ParseResponse
 from agents.llm_agent import LLMAgent
 from config import settings
 from security import get_api_key
@@ -35,7 +36,6 @@ def get_llm_agent() -> LLMAgent:
 async def parse_transport_request(
     request: ParseRequest,
     llm_agent: LLMAgent = Depends(get_llm_agent),
-    api_key: str = Depends(get_api_key)
 ) -> Dict[str, Any]:
     """
     Parse a transport request text and extract structured data using OpenAI's GPT-4.
@@ -50,8 +50,14 @@ async def parse_transport_request(
     """
     try:
         # Send prompt to LLM agent for parsing
-        parsed_data = llm_agent.parse_transport_request(request.prompt)
+        parsed_data = llm_agent.parse_transport_request(request.prompt, system_prompt_path="prompts/p_v1.txt")
         
+        # Handle date parsing errors
+        if 'pickup_date' in parsed_data and not isinstance(parsed_data['pickup_date'], (str, date)):
+            parsed_data['pickup_date'] = None
+        if 'delivery_date' in parsed_data and not isinstance(parsed_data['delivery_date'], (str, date)):
+            parsed_data['delivery_date'] = None
+            
         # Create response
         response = {
             "parsed_data": parsed_data,
@@ -61,7 +67,19 @@ async def parse_transport_request(
         return response
     
     except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Error parsing transport request: {str(e)}"
-        )
+        # Log the error but return a valid response with default values
+        print(f"Error parsing transport request: {str(e)}")
+        default_response = {
+            "parsed_data": {
+                "vehicle_type": "brak",
+                "cargo_items": [],
+                "pickup_postal_code": None,
+                "delivery_postal_code": None,
+                "pickup_date": None,
+                "delivery_date": None,
+                "is_urgent": False,
+                "is_stackable": False
+            },
+            "raw_prompt": request.prompt
+        }
+        return default_response
