@@ -31,5 +31,5 @@ Content-Type: application/json
 X-API-Key: twój_klucz_api
 
 {
-    "prompt": "chcę przewieźć 4 palety 100x80 cm o wysokości 2 metry odbiór 22-405 Zamość dostawa 86-302 Grudziądz"
+    "prompt": "chcę przewieźć 4 palety 100x80 cm o wysokości 2 metry odbiór 22-405 Zamość dostawa 86-302 Grudziądz odbiór za 3 dni dowóz następnego dnia"
 }

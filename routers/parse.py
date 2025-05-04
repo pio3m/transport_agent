@@ -7,7 +7,8 @@ from utils.cargo_calculator import CargoCalculator
 from schemas.structured_output import ParseRequest, ParseResponse
 from agents.llm_agent import LLMAgent
 from config import settings
-from security import get_api_key
+from utils.date_utils import process_polish_date
+
 
 router = APIRouter(
     prefix=settings.API_V1_STR,
@@ -41,11 +42,11 @@ async def parse_transport_request(
         # Przetwórz prompt przez LLM
         parsed_data = llm_agent.parse_transport_request(request.prompt, system_prompt_path="prompts/p_v1.txt")
 
-        # Sprawdź poprawność dat jak nie wpisz None
-        if 'pickup_date' in parsed_data and not isinstance(parsed_data['pickup_date'], (str, date)):
-            parsed_data['pickup_date'] = None
-        if 'delivery_date' in parsed_data and not isinstance(parsed_data['delivery_date'], (str, date)):
-            parsed_data['delivery_date'] = None
+       # Przetwarzanie dat względnych na konkretne daty
+        for date_field in ["pickup_date", "delivery_date"]:
+            if date_field in parsed_data and isinstance(parsed_data[date_field], str):
+                parsed_data[date_field] = process_polish_date(parsed_data[date_field])
+
 
         # Oblicz LDM i analizę ładunku
         vehicle_type = parsed_data.get("vehicle_type", "brak")
