@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List, Optional
+from typing import List, Optional, Union
 from datetime import date
 from enum import Enum
 
@@ -31,8 +31,8 @@ class TransportRequest(BaseModel):
     cargo_items: List[CargoItem] = Field(..., description="Lista ładunków")
     pickup_postal_code: Optional[str] = Field(None, description="Kod pocztowy miejsca odbioru")
     delivery_postal_code: Optional[str] = Field(None, description="Kod pocztowy miejsca dostawy")
-    pickup_date: Optional[date] = Field(None, description="Data odbioru")
-    delivery_date: Optional[date] = Field(None, description="Data dostawy")
+    pickup_date: Optional[Union[date, str]] = Field(default=None, description="Data odbioru")
+    delivery_date: Optional[Union[date, str]] = Field(default=None, description="Data dostawy")
     is_urgent: bool = Field(False, description="Czy zlecenie jest pilne")
     is_stackable: bool = Field(False, description="Czy ładunki można piętrować")
     cargo_analysis: Optional[CargoAnalysis] = None

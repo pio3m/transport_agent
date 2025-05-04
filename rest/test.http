@@ -7,22 +7,22 @@ X-API-Key: S74y3DX7KCy84uw-Oq-6MYFyY2lANnir1PEUf_wNaBM
     "prompt": "Potrzebuję transportu z Warszawy do Sierpca. Towar: 10 palet, waga 500kg, wymiary 120x80x150cm. Termin: jutro. dowóz następnego dnia"
 }
 
-### Przykład 2: Transport z dodatkowymi wymaganiami
+### LDM
 POST http://localhost:8000/api/v1/parse
 Content-Type: application/json
 X-API-Key: 2lx5x5BXzmRGHT-JAzGna7mOPDhSuoQ1D8uxocDLKTw
 
 {
-    "prompt": "chcę przewieźć 4 palety 100x80 cm o wysokości 2 metry oraz i ładunek 270x100 o wysokości 100 cm odbiór 42-445 Szczekociny dostawa 34-442	Łapsze Niżne odbiór za 3 dni dowóz następnego dnia"
+    "prompt": "chcę przewieźć 3 palety 100x80 cm o wysokości 2 metry odbiór 42-445 Szczekociny dostawa 34-442 Łapsze Niżne"
 }
 
-### Przykład 3: Transport międzynarodowy
+### LDM 2
 POST http://localhost:8000/api/v1/parse
 Content-Type: application/json
 X-API-Key: twój_klucz_api
 
 {
-    "prompt": "Chce przewieźć 7 palet o wysokości 2 metry 100 x 80 cm z 09-506 Soczewka do 98-270 Stolec odbiór 20 marca dostawa 23 marca"
+    "prompt":  "chcę przewieźć 4 palety 100x80 cm o wysokości 2 metry odbiór 42-445 Szczekociny dostawa 34-442 Łapsze Niżne"
 }
 
 ### Przykład 4: Transport z obsługą załadunku
@@ -31,5 +31,5 @@ Content-Type: application/json
 X-API-Key: twój_klucz_api
 
 {
-    "prompt": "Transport z Łodzi do Katowic. 8 palet, waga 400kg. Potrzebuję obsługi załadunku i rozładunku. Termin: pojutrze rano."
+    "prompt": "chcę przewieźć 4 palety 100x80 cm o wysokości 2 metry odbiór 22-405 Zamość dostawa 86-302 Grudziądz"
 }
