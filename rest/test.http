@@ -1,0 +1,35 @@
+### Przykład 1: Standardowy transport
+POST http://localhost:8000/api/v1/parse
+Content-Type: application/json
+X-API-Key: 2lx5x5BXzmRGHT-JAzGna7mOPDhSuoQ1D8uxocDLKTw
+
+{
+    "prompt": "Potrzebuję transportu z Warszawy do Krakowa. Towar: 10 palet, waga 500kg, wymiary 120x80x150cm. Termin: jutro."
+}
+
+### Przykład 2: Transport z dodatkowymi wymaganiami
+POST http://localhost:8000/api/v1/parse
+Content-Type: application/json
+X-API-Key: 2lx5x5BXzmRGHT-JAzGna7mOPDhSuoQ1D8uxocDLKTw
+
+{
+    "prompt": "chcę przewieźć 4 palety 100x80 cm o wysokości 2 metry oraz i ładunek 270x100 o wysokości 100 cm odbiór 42-445 Szczekociny dostawa 34-442	Łapsze Niżne odbiór za 3 dni dowóz następnego dnia"
+}
+
+### Przykład 3: Transport międzynarodowy
+POST http://localhost:8000/api/v1/parse
+Content-Type: application/json
+X-API-Key: twój_klucz_api
+
+{
+    "prompt": "Transport z Wrocławia do Berlina. 15 palet, waga 1200kg, wymiary 120x100x160cm. Termin: za 3 dni. Potrzebuję dokumentów celnych."
+}
+
+### Przykład 4: Transport z obsługą załadunku
+POST http://localhost:8000/api/v1/parse
+Content-Type: application/json
+X-API-Key: twój_klucz_api
+
+{
+    "prompt": "Transport z Łodzi do Katowic. 8 palet, waga 400kg. Potrzebuję obsługi załadunku i rozładunku. Termin: pojutrze rano."
+}
