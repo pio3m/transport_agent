@@ -59,7 +59,6 @@ class LLMAgent:
                 content = result.get("response", "").strip()
                 parsed_data = json.loads(content)
 
-            # self._process_dates(parsed_data)
             return parsed_data
 
         except requests.exceptions.RequestException as e:
@@ -67,14 +66,6 @@ class LLMAgent:
         except json.JSONDecodeError as e:
             raise Exception(f"Błąd dekodowania JSON z odpowiedzi: {str(e)}")
 
-
-    
-
-
-    def _process_dates(self, data: Dict[str, Any]) -> None:
-        for key in ["pickup_date", "delivery_date"]:
-            if key in data and data[key]:
-                data[key] = process_polish_date(data[key])
 
 def generate_system_prompt(base_prompt_path: str) -> str:
         today_str = datetime.today().strftime("%Y-%m-%d")
