@@ -36,6 +36,8 @@ class TransportRequest(BaseModel):
     is_urgent: bool = Field(False, description="Czy zlecenie jest pilne")
     is_stackable: bool = Field(False, description="Czy ładunki można piętrować")
     cargo_analysis: Optional[CargoAnalysis] = None
+    distance_km: Optional[float] = None
+
 
 
 class ParseRequest(BaseModel):

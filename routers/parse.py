@@ -8,7 +8,7 @@ from schemas.structured_output import ParseRequest, ParseResponse
 from agents.llm_agent import LLMAgent
 from config import settings
 from utils.date_utils import process_polish_date
-
+from utils.distance_tool import get_distance_osm
 
 router = APIRouter(
     prefix=settings.API_V1_STR,
@@ -42,6 +42,13 @@ async def parse_transport_request(
         # Przetwórz prompt przez LLM
         parsed_data = llm_agent.parse_transport_request(request.prompt, system_prompt_path="prompts/p_v1.txt")
 
+        # obliczanie dystansu
+        origin = parsed_data.get("pickup_postal_code")
+        dest = parsed_data.get("delivery_postal_code")
+
+        if origin and dest:
+            parsed_data["distance_km"] = round(get_distance_osm(origin, dest), 1)
+            
        # Przetwarzanie dat względnych na konkretne daty
         for date_field in ["pickup_date", "delivery_date"]:
             if date_field in parsed_data and isinstance(parsed_data[date_field], str):
