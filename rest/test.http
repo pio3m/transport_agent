@@ -9,7 +9,7 @@ X-API-Key: S74y3DX7KCy84uw-Oq-6MYFyY2lANnir1PEUf_wNaBM
 
 
 ### LDM
-POST http://localhost:8000/api/v1/parse
+POST https://transport-agent.onrender.com/api/v1/parse
 Content-Type: application/json
 X-API-Key: twój_klucz_api
 

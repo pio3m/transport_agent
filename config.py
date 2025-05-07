@@ -28,6 +28,7 @@ class Settings(BaseModel):
     LANGFUSE_SECRET_KEY: str = os.getenv("LANGFUSE_SECRET_KEY", "")
     LANGFUSE_HOST: str = os.getenv("LANGFUSE_HOST", "https://cloud.langfuse.com")
     LANGFUSE_ENABLED: bool = os.getenv("LANGFUSE_ENABLED", "false").lower() == "true"
+    LANGFUSE_USER_ID: str = os.getenv("LANGFUSE_USER_ID", "default-user")
 
     # # Vehicles
     # VEHICLE_TYPES = {

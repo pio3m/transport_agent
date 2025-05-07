@@ -21,9 +21,6 @@ class LangfuseClient:
             )
         else:
             self.client = None
-        print(">>> LANGFUSE_HOST:", settings.LANGFUSE_HOST)
-        print(">>> LANGFUSE_PUBLIC_KEY:", settings.LANGFUSE_PUBLIC_KEY)
-        print(">>> LANGFUSE_SECRET_KEY:", settings.LANGFUSE_SECRET_KEY)
 
 
     def track_llm_request(
@@ -51,10 +48,9 @@ class LangfuseClient:
             # Create a new trace
             trace = self.client.trace(
                 name="transport_request_parse",
-                user_id="debug-user-123",
+                user_id=settings.LANGFUSE_USER_ID,
                 metadata=metadata or {}
             )
-            print("[Langfuse] Trace created:", trace)
 
             # Create a generation
             generation = trace.generation(
@@ -68,15 +64,12 @@ class LangfuseClient:
                     "provider": settings.LLM_PROVIDER
                 }
             )
-            print("[Langfuse] Generation created:", generation)
 
             # Update the generation and trace
             generation.update()
             trace.update()
 
-            print("[Langfuse] Flushing events now...")
             self.client.flush()
-            print("[Langfuse] Flush done.")
 
 
         except Exception as e:
