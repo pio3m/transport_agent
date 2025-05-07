@@ -23,6 +23,12 @@ class Settings(BaseModel):
     DISTANCE_API_KEY: str = os.getenv("DISTANCE_API_KEY", "")
     API_KEY: str = os.getenv("API_KEY", secrets.token_urlsafe(32))  # Generuje klucz jeśli nie istnieje
 
+    # Langfuse Configuration
+    LANGFUSE_PUBLIC_KEY: str = os.getenv("LANGFUSE_PUBLIC_KEY", "")
+    LANGFUSE_SECRET_KEY: str = os.getenv("LANGFUSE_SECRET_KEY", "")
+    LANGFUSE_HOST: str = os.getenv("LANGFUSE_HOST", "https://cloud.langfuse.com")
+    LANGFUSE_ENABLED: bool = os.getenv("LANGFUSE_ENABLED", "false").lower() == "true"
+
     # # Vehicles
     # VEHICLE_TYPES = {
     #     "bus": {

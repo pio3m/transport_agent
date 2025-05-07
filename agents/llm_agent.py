@@ -5,12 +5,14 @@ from datetime import datetime
 
 from config import settings
 from .llm_strategies import OpenAIStrategy, OllamaStrategy
+from utils.langfuse_client import LangfuseClient
 
 class LLMAgent:
     def __init__(self, provider: str = None, model_name: str = None, api_key: str = None):
         self.provider = provider or settings.LLM_PROVIDER
         self.model_name = model_name or (settings.OLLAMA_MODEL if self.provider == "ollama" else "gpt-3.5-turbo")
         self.api_key = api_key or settings.LLM_API_KEY
+        self.langfuse = LangfuseClient()
 
         if self.provider == "openai":
             self.strategy = OpenAIStrategy(self.api_key)
@@ -23,7 +25,21 @@ class LLMAgent:
         system_message = generate_system_prompt(system_prompt_path)
 
         try:
-            return self.strategy.generate_response(prompt, system_message, self.model_name)
+            response = self.strategy.generate_response(prompt, system_message, self.model_name)
+            
+            # Track the request in Langfuse
+            self.langfuse.track_llm_request(
+                prompt=prompt,
+                system_message=system_message,
+                response=response,
+                metadata={
+                    "provider": self.provider,
+                    "model": self.model_name,
+                    "system_prompt_path": system_prompt_path
+                }
+            )
+            
+            return response
         except requests.exceptions.RequestException as e:
             raise Exception(f"Błąd zapytania HTTP: {str(e)}")
         except json.JSONDecodeError as e:

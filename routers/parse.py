@@ -70,6 +70,7 @@ async def parse_transport_request(
         parsed_data["cargo_analysis"] = cargo_result
 
         # Wyznacz optymalny pojazd
+        # TODO do poprawy
         suggestion = CargoCalculator.suggest_optimal_vehicle(cargo_items)
         parsed_data["vehicle_suggestion"] = suggestion["vehicle"]
 
