@@ -2,6 +2,7 @@ from langfuse import Langfuse
 from config import settings
 from typing import Optional, Dict, Any
 import json
+import os
 
 class LangfuseClient:
     _instance = None
@@ -49,6 +50,7 @@ class LangfuseClient:
             trace = self.client.trace(
                 name="transport_request_parse",
                 user_id=settings.LANGFUSE_USER_ID,
+                tags=[os.getenv("ENVIRONMENT", "dev")],
                 metadata=metadata or {}
             )
 
