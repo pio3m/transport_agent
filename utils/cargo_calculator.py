@@ -1,4 +1,4 @@
-from typing import List, Dict, Tuple
+from typing import List, Dict
 from math import floor
 
 VEHICLES = {
@@ -25,6 +25,11 @@ VEHICLES = {
     }
 }
 
+def get_max_ldm(vehicle_type: str) -> float:
+    if vehicle_type not in VEHICLES:
+        return VEHICLES["naczepa"]["max_ldm"]
+    return VEHICLES[vehicle_type]["max_ldm"]
+
 
 class CargoCalculator:
     def __init__(self, vehicle_type: str = "naczepa"):
@@ -32,31 +37,40 @@ class CargoCalculator:
         self.vehicle = VEHICLES[self.vehicle_type]
 
     def calculate(self, cargo_items: List[Dict]) -> Dict:
+        if not cargo_items:
+            return {
+                "ldm": 0.0,
+                "fit_in_vehicle": True,
+                "warnings": ["Brak danych o ładunku. Zwracamy maksymalny LDM dla podanego pojazdu."],
+                "total_weight": 0,
+                "vehicle_used": self.vehicle_type,
+                "vehicle_suggestion": self.vehicle_type,
+                "max_ldm": self.vehicle["max_ldm"]
+            }
+
         total_ldm = 0.0
         total_weight = 0
         warnings = []
         fit_in_vehicle = True
 
         for item in cargo_items:
-            l = item["length"] * 100  # m -> cm
+            l = item["length"] * 100
             w = item["width"] * 100
             h = item["height"] * 100
             qty = item["quantity"]
-            weight_per_piece = item.get("weight", 0)  # kg
+            weight_per_piece = item.get("weight", 0)
 
-            # Walidacja wysokości
             if h > self.vehicle["height_cm"]:
                 warnings.append(f"Ładunek o wysokości {h} cm przekracza wysokość pojazdu ({self.vehicle['height_cm']} cm).")
                 fit_in_vehicle = False
 
-            # Sprawdzenie obu ułożeń (obrót): [l, w] oraz [w, l]
             orientations = [(l, w), (w, l)]
             best_ldm = None
 
             for orient_l, orient_w in orientations:
                 pieces_per_row = floor(self.vehicle["width_cm"] / orient_w)
                 if pieces_per_row == 0:
-                    continue  # nie mieści się żaden w rzędzie
+                    continue
 
                 full_rows = qty // pieces_per_row
                 leftover = qty % pieces_per_row
@@ -72,25 +86,24 @@ class CargoCalculator:
                 fit_in_vehicle = False
                 continue
 
-            total_ldm += round(best_ldm, 2)
+            total_ldm += best_ldm
             total_weight += weight_per_piece * qty
 
-        # Walidacja LDM
         if total_ldm > self.vehicle["max_ldm"]:
-            warnings.append(f"Łączna długość LDM ({total_ldm}) przekracza maksymalną dla {self.vehicle_type} ({self.vehicle['max_ldm']}).")
+            warnings.append(f"Łączna długość LDM ({round(total_ldm, 2)}) przekracza maksymalną dla {self.vehicle_type} ({self.vehicle['max_ldm']}).")
             fit_in_vehicle = False
 
-        # Walidacja wagi
         if total_weight > self.vehicle["max_weight"]:
             warnings.append(f"Łączna waga ładunku ({total_weight} kg) przekracza maksymalną dla {self.vehicle_type} ({self.vehicle['max_weight']} kg).")
             fit_in_vehicle = False
 
-        # Ostrzeżenie o nieoptymalnym LDM
         if 0 < total_ldm < (0.8 * self.vehicle["max_ldm"]):
             warnings.append("Zajmujesz mniej niż 80% przestrzeni pojazdu – rozważ wybór opcji 'dowolny typ pojazdu'.")
 
+        total_ldm = round(total_ldm, 2)
+
         return {
-            "ldm": round(total_ldm, 2),
+            "ldm": total_ldm,
             "fit_in_vehicle": fit_in_vehicle,
             "warnings": warnings,
             "total_weight": total_weight,
@@ -110,6 +123,5 @@ class CargoCalculator:
         if not candidates:
             return {"vehicle": "brak", "reason": "Żaden pojazd nie mieści ładunku"}
 
-        # wybierz najmniejszy pojazd, który mieści ładunek
         best = min(candidates, key=lambda x: x[1])
         return {"vehicle": best[0]}

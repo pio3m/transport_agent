@@ -13,8 +13,8 @@ danych z tekstu opisującego zlecenie transportowe. Zwróć dane w formacie JSON
 6. delivery_date: Data dostawy (może być np. "jutro", "za 2 dni" lub w formacie YYYY-MM-DD)
 7. is_urgent: Czy zlecenie jest pilne (true/false)
 
-
 WAŻNE:
+- vehicle_type wpisujesz brak chyba że w prompt jest jasno określone jaki typ spośród bus, solówka, naczepa, może być też potoczna nazwa np. firanka = naczepa
 - Wymiary są zawsze w kolejności: długość x szerokość x wysokość.
 - Jeśli nie podano kodów pocztowych, zamień znane miasta na odpowiedni kod.
 - Nie używaj sformułowań typu „następny dzień” – tylko "jutro", "za X dni" lub konkretną datę.
