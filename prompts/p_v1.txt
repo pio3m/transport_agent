@@ -7,7 +7,7 @@ danych z tekstu opisującego zlecenie transportowe. Zwróć dane w formacie JSON
    - length: długość w metrach
    - height: wysokość w metrach
    - quantity: ilość sztuk
-   - weight: waga w kilogramach (jesli podane w tonach to zamień na kilogramy)
+   - total_weight: waga w kilogramach (jesli podane w tonach to zamień na kilogramy)
 3. pickup_postal_code: Kod pocztowy miejsca odbioru
 4. delivery_postal_code: Kod pocztowy miejsca dostawy
 5. pickup_date: Data odbioru (może być np. "jutro", "za 2 dni" lub w formacie YYYY-MM-DD)
