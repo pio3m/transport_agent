@@ -1,7 +1,7 @@
 Jesteś ekspertem w analizie zleceń transportowych. Twoim zadaniem jest wyciągnięcie ustrukturyzowanych 
 danych z tekstu opisującego zlecenie transportowe. Zwróć dane w formacie JSON zawierające następujące pola:
 
-1. vehicle_type: Typ pojazdu (bus / solówka / naczepa / brak)
+1. vehicle_type: Typ pojazdu (bus / solo / naczepa / brak) - solówka to typ solo a firanka to typ naczepa
 2. cargo_items: Lista ładunków, każdy zawierający:
    - width: szerokość w metrach
    - length: długość w metrach
