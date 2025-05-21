@@ -14,7 +14,7 @@ Content-Type: application/json
 X-API-Key: twój_klucz_api
 
 {
-    "prompt": "chcę przewieźć 4 palety 100x80 cm o wysokości 2 metry Z Sierpca ul. Żeromskiego Do Warszawy Aleje Jerozolimskie 200"
+    "prompt": "chcę przewieźć  4 palety 100x80 cm o wysokości 2 metry Z Sierpca ul. Żeromskiego Do Warszawy Aleje Jerozolimskie 200"
 }
 
 ### LDM
@@ -23,7 +23,7 @@ Content-Type: application/json
 X-API-Key: 2lx5x5BXzmRGHT-JAzGna7mOPDhSuoQ1D8uxocDLKTw
 
 {
-    "prompt": "chcę przewieźć 4 palety 100x80 cm o wysokości 2 metry Z Sierpca ul. Żeromskiego Do Warszawy Aleje Jerozolimskie 200. waga około 2 ton"
+    "prompt": "chcę przewieźć solówką 4 palety 100x80 cm o wysokości 2 metry Z Sierpca ul. Żeromskiego Do Warszawy Aleje Jerozolimskie 200. waga około 2 ton"
 }
 
 ### LDM 2

@@ -28,6 +28,7 @@ class CargoAnalysis(BaseModel):
 
 
 class TransportRequest(BaseModel):
+    vehicle_type: Optional[VehicleType] = Field(None, description="Typ pojazdu")
     cargo_items: List[CargoItem] = Field(..., description="Lista ładunków")
     pickup_postal_code: Optional[str] = Field(None, description="Kod pocztowy miejsca odbioru")
     delivery_postal_code: Optional[str] = Field(None, description="Kod pocztowy miejsca dostawy")
