@@ -16,6 +16,16 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
+@router.get("/", response_model=Dict[str, str])
+def health_check() -> Dict[str, str]:
+    """
+    Endpoint to check the health of the API.
+    
+    Returns:
+        Dict[str, str]: A simple health check response
+    """
+    return {"status": "ok", "version": settings.VERSION}
+
 
 def get_llm_agent() -> LLMAgent:
     """
