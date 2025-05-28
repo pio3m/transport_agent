@@ -59,23 +59,8 @@ async def parse_transport_request(
         vehicle_type = parsed_data.get("vehicle_type", "brak")
         cargo_items = parsed_data.get("cargo_items", [])
 
-        if vehicle_type == "brak":
-            # domyślnie naczepa – może też być logika "dowolny"
-            vehicle_type = "naczepa"
+        calculate_cargo(parsed_data, vehicle_type, cargo_items)
 
-        calculator = CargoCalculator(vehicle_type=vehicle_type)
-        cargo_result = calculator.calculate(cargo_items)
-
-        # Rozszerz dane wyjściowe
-        parsed_data["cargo_analysis"] = cargo_result
-
-        # Wyznacz optymalny pojazd
-        # TODO do poprawy
-        suggestion = CargoCalculator.suggest_optimal_vehicle(cargo_items)
-        parsed_data["vehicle_suggestion"] = suggestion["vehicle"]
-
-
-        # Zbuduj odpowiedź
         response = {
             "parsed_data": parsed_data,
             "raw_prompt": request.prompt
@@ -105,3 +90,41 @@ async def parse_transport_request(
             "raw_prompt": request.prompt
         }
         return default_response
+
+def calculate_cargo(parsed_data, vehicle_type, cargo_items):
+    print(parsed_data)
+
+    if vehicle_type == "brak":
+        vehicle_type = "naczepa"
+   
+    calculator = CargoCalculator(vehicle_type=vehicle_type)
+
+     # Spr czy są dane o ładunku - jesli nie to dajemy max ldm dla danego pojazdu
+    if not cargo_items:
+        parsed_data["cargo_analysis"] = {
+               "ldm": calculator.get_max_ldm(),
+                "fit_in_vehicle": True,
+                "warnings": ["Brak danych o ładunku. Zwracamy maksymalny LDM dla podanego pojazdu."],
+                "vehicle_used": vehicle_type,
+                "vehicle_suggestion": 'brak',
+                "total_weight": 0,
+        }
+        return
+    
+    # Oblicz LDM i analizę ładunku
+    cargo_result = calculator.calculateLDM(cargo_items)
+
+    if calculator.check_ldm(cargo_result["ldm"]):
+        cargo_result["fit_in_vehicle"] = False
+        cargo_result["warnings"].append(f"Ładunek przekracza maksymalną dopuszczalną ładowność dla pojazdu {vehicle_type}.")
+
+    # Rozszerz dane wyjściowe
+    parsed_data["cargo_analysis"] = cargo_result
+
+
+
+
+        # Wyznacz optymalny pojazd
+        # TODO do poprawy
+    suggestion = CargoCalculator.suggest_optimal_vehicle(cargo_items)
+    parsed_data["vehicle_suggestion"] = suggestion["vehicle"]

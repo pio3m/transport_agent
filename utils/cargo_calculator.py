@@ -1,22 +1,28 @@
 from typing import List, Dict
 from math import floor
+from enum import Enum
+
+class VehicleType(Enum):
+    BUS = "bus"
+    SOLO = "solówka"
+    NACZEPA = "naczepa"
 
 VEHICLES = {
-    "bus": {
+    VehicleType.BUS: {
         "length_cm": 450,
         "width_cm": 240,
         "height_cm": 260,
-        "max_ldm": 4.5,
+        "max_ldm": 4.4,
         "max_weight": 1500
     },
-    "solówka": {
+    VehicleType.SOLO: {
         "length_cm": 730,
         "width_cm": 240,
         "height_cm": 260,
-        "max_ldm": 7.3,
+        "max_ldm": 7.7,
         "max_weight": 9000
     },
-    "naczepa": {
+    VehicleType.NACZEPA: {
         "length_cm": 1360,
         "width_cm": 240,
         "height_cm": 260,
@@ -25,28 +31,39 @@ VEHICLES = {
     }
 }
 
-def get_max_ldm(vehicle_type: str) -> float:
+def get_max_ldm(vehicle_type: str | VehicleType) -> float:
+    if isinstance(vehicle_type, str):
+        try:
+            vehicle_type = VehicleType(vehicle_type)
+        except ValueError:
+            vehicle_type = VehicleType.NACZEPA
     if vehicle_type not in VEHICLES:
-        return VEHICLES["naczepa"]["max_ldm"]
+        return VEHICLES[VehicleType.NACZEPA]["max_ldm"]
     return VEHICLES[vehicle_type]["max_ldm"]
 
 
 class CargoCalculator:
-    def __init__(self, vehicle_type: str = "naczepa"):
-        self.vehicle_type = vehicle_type if vehicle_type in VEHICLES else "naczepa"
+    def __init__(self, vehicle_type: str | VehicleType = VehicleType.NACZEPA):
+        if isinstance(vehicle_type, str):
+            try:
+                vehicle_type = VehicleType(vehicle_type)
+            except ValueError:
+                vehicle_type = VehicleType.NACZEPA
+        self.vehicle_type = vehicle_type if vehicle_type in VEHICLES else VehicleType.NACZEPA
         self.vehicle = VEHICLES[self.vehicle_type]
 
-    def calculate(self, cargo_items: List[Dict]) -> Dict:
-        if not cargo_items:
-            return {
-                "ldm": 0.0,
-                "fit_in_vehicle": True,
-                "warnings": ["Brak danych o ładunku. Zwracamy maksymalny LDM dla podanego pojazdu."],
-                "total_weight": 0,
-                "vehicle_used": self.vehicle_type,
-                "vehicle_suggestion": self.vehicle_type,
-                "max_ldm": self.vehicle["max_ldm"]
-            }
+    def check_ldm(self, ldm):
+        #spr czy dla danego typu nie przekracza ldm
+        return ldm > self.vehicle["max_ldm"]
+         
+
+
+
+    def get_max_ldm(self) -> float:
+        return self.vehicle["max_ldm"]
+    
+    def calculateLDM(self, cargo_items: List[Dict]) -> Dict:
+       
 
         total_ldm = 0.0
         total_weight = 0
@@ -107,16 +124,16 @@ class CargoCalculator:
             "fit_in_vehicle": fit_in_vehicle,
             "warnings": warnings,
             "total_weight": total_weight,
-            "vehicle_used": self.vehicle_type,
-            "vehicle_suggestion": self.vehicle_type if fit_in_vehicle else "naczepa"
+            "vehicle_used": self.vehicle_type.value,
+            "vehicle_suggestion": self.vehicle_type.value if fit_in_vehicle else VehicleType.NACZEPA.value
         }
 
     @staticmethod
     def suggest_optimal_vehicle(cargo_items: List[Dict]) -> Dict:
         candidates = []
-        for vehicle_type in ["bus", "solówka", "naczepa"]:
+        for vehicle_type in [VehicleType.BUS, VehicleType.SOLO, VehicleType.NACZEPA]:
             calc = CargoCalculator(vehicle_type)
-            result = calc.calculate(cargo_items)
+            result = calc.calculateLDM(cargo_items)
             if result["fit_in_vehicle"]:
                 candidates.append((vehicle_type, result["ldm"]))
 
@@ -124,4 +141,4 @@ class CargoCalculator:
             return {"vehicle": "brak", "reason": "Żaden pojazd nie mieści ładunku"}
 
         best = min(candidates, key=lambda x: x[1])
-        return {"vehicle": best[0]}
+        return {"vehicle": best[0].value}
