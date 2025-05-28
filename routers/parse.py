@@ -92,8 +92,7 @@ async def parse_transport_request(
                 "is_stackable": False,
                 "cargo_analysis": {
                     "ldm": 0,
-                    "fit_in_vehicle": False,
-                    "warnings": ["Błąd podczas przetwarzania"],
+                    "warnings": ["Błąd podczas przetwarzania" + str(e)],
                     "total_weight": 0
                 }
             },
