@@ -15,7 +15,9 @@ danych z tekstu opisującego zlecenie transportowe. Zwróć dane w formacie JSON
 7. is_urgent: Czy zlecenie jest pilne (true/false)
 
 WAŻNE:
-- vehicle_type wpisujesz brak chyba że w prompt jest jasno określone jaki typ spośród bus, solówka, naczepa, może być też potoczna nazwa np. firanka = naczepa
+- vehicle_type wpisujesz brak chyba że w prompt jest jasno określone jaki typ spośród bus, solówka, naczepa.
+- vehicle_type może być też potoczna nazwa wtedy zamień na jedno z typu (bus / solówka / naczepa / brak) np. firanka = naczepa
+- może być wskazany konkretny typ pojazdy np. cała naczepa to typ naczepa
 - Wymiary są zawsze w kolejności: długość x szerokość x wysokość.
 - Jeśli nie podano kodów pocztowych, zamień znane miasta na odpowiedni kod.
 - Nie używaj sformułowań typu „następny dzień” – tylko "jutro", "za X dni" lub konkretną datę.

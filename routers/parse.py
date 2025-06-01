@@ -109,7 +109,7 @@ def calculate_cargo(parsed_data, vehicle_type, cargo_items):
     calculator = CargoCalculator(vehicle_type=vehicle_type)
 
      # Spr czy są dane o ładunku - jesli nie to dajemy max ldm dla danego pojazdu
-    if not cargo_items:
+    if not cargo_items or len(cargo_items) == 0:
         parsed_data["cargo_analysis"] = {
                "ldm": calculator.get_max_ldm(),
                 "fit_in_vehicle": True,
