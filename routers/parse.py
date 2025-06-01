@@ -49,8 +49,11 @@ async def parse_transport_request(
     llm_agent: LLMAgent = Depends(get_llm_agent),
 ) -> Dict[str, Any]:
     try:
+        # Na początku w parse_transport_request
+        cleaned_prompt = request.prompt.replace('\r\n', '\n').replace('\r', '\n')
+
         # Przetwórz prompt przez LLM
-        parsed_data = llm_agent.parse_transport_request(request.prompt, system_prompt_path="prompts/p_v1.txt")
+        parsed_data = llm_agent.parse_transport_request(cleaned_prompt, system_prompt_path="prompts/p_v1.txt")
 
         # obliczanie dystansu
         origin = parsed_data.get("pickup_postal_code")
@@ -69,11 +72,17 @@ async def parse_transport_request(
         vehicle_type = parsed_data.get("vehicle_type", "brak")
         cargo_items = parsed_data.get("cargo_items", [])
 
+        # Validate cargo_items to ensure no None values for numeric fields
+        for item in cargo_items:
+            for key in ["length", "width", "height", "weight", "quantity"]:
+                if key in item and (item[key] is None or not isinstance(item[key], (int, float))):
+                    item[key] = 0
+
         calculate_cargo(parsed_data, vehicle_type, cargo_items)
 
         response = {
             "parsed_data": parsed_data,
-            "raw_prompt": request.prompt
+            "raw_prompt": cleaned_prompt
         }
 
         return response
@@ -103,20 +112,20 @@ async def parse_transport_request(
 def calculate_cargo(parsed_data, vehicle_type, cargo_items):
     print(parsed_data)
 
-    if vehicle_type == "brak":
-        vehicle_type = "naczepa"
-   
     calculator = CargoCalculator(vehicle_type=vehicle_type)
 
      # Spr czy są dane o ładunku - jesli nie to dajemy max ldm dla danego pojazdu
-    if not cargo_items or len(cargo_items) == 0:
+    # Sprawdź, czy brakuje danych o ładunku
+    if any(
+        item.get('width', 0) == 0 or item.get('height', 0) == 0 for item in cargo_items
+    ):
         parsed_data["cargo_analysis"] = {
-               "ldm": calculator.get_max_ldm(),
-                "fit_in_vehicle": True,
-                "warnings": ["Brak danych o ładunku. Zwracamy maksymalny LDM dla podanego pojazdu."],
-                "vehicle_used": vehicle_type,
-                "vehicle_suggestion": 'brak',
-                "total_weight": 0,
+            "ldm": calculator.get_max_ldm(),
+            "fit_in_vehicle": True,
+            "warnings": ["Brak danych o ładunku. Zwracamy maksymalny LDM dla podanego pojazdu."],
+            "vehicle_used": vehicle_type,
+            "vehicle_suggestion": 'brak',
+            "total_weight": 0,
         }
         return
     
