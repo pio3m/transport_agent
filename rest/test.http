@@ -1,10 +1,10 @@
 ### Przykład 1: Standardowy transport
-POST https://transport-agent.onrender.com/api/v1/parse
+POST http://localhost:8000/api/v1/parse
 Content-Type: application/json
 X-API-Key: S74y3DX7KCy84uw-Oq-6MYFyY2lANnir1PEUf_wNaBM
 
 {
-    "prompt": "Chcę przewieżć 2 paczki 2 x 2 x 2 m o wadze 2500 kg odbiór jutro dostawa pojutrze, z 09-200 sierpc do 00-193 Warszawa"
+    "prompt": "proszę o wycenę: Miejsce załadunku 86-140 Drzycim Data załadunku 27.05.2025 godzina 6:00 Miejsce dostawy: Iqony Fernwarme Gmbh Gewerkenstraße 38 45881 Gelsenkirchen DE 2 palety Euro, waga łączna 1000kg"
 }
 
 

@@ -13,6 +13,7 @@ danych z tekstu opisującego zlecenie transportowe. Zwróć dane w formacie JSON
 5. pickup_date: Data odbioru (może być np. "jutro", "za 2 dni" lub w formacie YYYY-MM-DD)
 6. delivery_date: Data dostawy (może być np. "jutro", "za 2 dni" lub w formacie YYYY-MM-DD)
 7. is_urgent: Czy zlecenie jest pilne (true/false)
+8. route_type: Typ trasy. (Krajowy - jak w Polsce, Import - jak dostawa do Polski, Export - jak dostawa poza Polskie)
 
 WAŻNE:
 - vehicle_type wpisujesz brak chyba że w prompt jest jasno określone jaki typ spośród bus, solówka, naczepa.

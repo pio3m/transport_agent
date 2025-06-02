@@ -38,6 +38,7 @@ class TransportRequest(BaseModel):
     is_stackable: bool = Field(False, description="Czy ładunki można piętrować")
     cargo_analysis: Optional[CargoAnalysis] = None
     distance_km: Optional[float] = None
+    route_type: Optional[str] = None
 
 
 
