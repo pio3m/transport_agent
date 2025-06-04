@@ -9,12 +9,12 @@ X-API-Key: S74y3DX7KCy84uw-Oq-6MYFyY2lANnir1PEUf_wNaBM
 
 
 ### LDM
-POST https://transport-agent.onrender.com/api/v1/parse
+POST http://localhost:8000/api/v1/parse
 Content-Type: application/json
 X-API-Key: twój_klucz_api
 
 {
-    "prompt": "chcę przewieźć  4 palety 100x80 cm o wysokości 2 metry Z Sierpca ul. Żeromskiego Do Warszawy Aleje Jerozolimskie 200"
+    "prompt": "Chcę przewieźć 10 palet 100 x 200 x 100 o wadze łącznej 5000 kg z 09-200 sierpc do 31-101 kraków odbiór jutro dostawa pojutrze"
 }
 
 ### LDM

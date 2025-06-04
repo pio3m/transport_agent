@@ -23,3 +23,6 @@ WAŻNE:
 - Jeśli nie podano kodów pocztowych, zamień znane miasta na odpowiedni kod.
 - Nie używaj sformułowań typu „następny dzień” – tylko "jutro", "za X dni" lub konkretną datę.
 - Zwracaj tylko czysty JSON, bez komentarzy, znaków przed/po i formatowania.
+- Jeśli waga podana jest jako "waga łączna", "łączna waga", "waga całkowita", "waga razem" lub podobnie, rozdziel ją równomiernie na wszystkie sztuki (jeśli podana jest liczba sztuk). Przykład: "10 palet o wadze łącznej 5000 kg" oznacza 10 sztuk, każda po 500 kg.
+- Jeśli podano wagę bez wskazania, że to waga całkowita/łączna, uznaj ją za wagę pojedynczej sztuki.
+- Jeśli masz wątpliwości, domyślnie traktuj wagę jako łączną, jeśli odnosi się do wielu sztuk i nie jest powtórzona przy każdej sztuce osobno.
