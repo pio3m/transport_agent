@@ -9,6 +9,7 @@ from agents.llm_agent import LLMAgent
 from config import settings
 from utils.date_utils import process_polish_date
 from utils.distance_tool import get_distance_osm
+import re
 
 router = APIRouter(
     prefix=settings.API_V1_STR,
@@ -59,6 +60,12 @@ async def parse_transport_request(
         origin = parsed_data.get("pickup_postal_code")
         dest = parsed_data.get("delivery_postal_code")
 
+        # Sprawdź, czy transport jest krajowy i popraw kody pocztowe, jeśli trzeba
+        if parsed_data.get("route_type", "").lower() == "krajowy":
+            origin = check_post_code(origin)
+            dest = check_post_code(dest)
+
+
         if origin and dest:
             parsed_data["distance_km"] = round(get_distance_osm(origin, dest), 1)
             
@@ -108,6 +115,15 @@ async def parse_transport_request(
             "raw_prompt": request.prompt
         }
         return default_response
+
+def check_post_code(code):
+    if isinstance(code, str):
+        code = code.strip()
+        if re.match(r"^\d{2}-\d{3}$", code):
+            return code
+        # Jeśli jest w formacie XXXXX, dodaj myślnik po 2 cyfrach
+        if re.match(r"^\d{5}$", code):
+            return f"{code[:2]}-{code[2:]}"
 
 def calculate_cargo(parsed_data, vehicle_type, cargo_items):
     print(parsed_data)

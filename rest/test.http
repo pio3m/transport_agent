@@ -32,7 +32,17 @@ Content-Type: application/json
 X-API-Key: twój_klucz_api
 
 {
-    "prompt":  "chcę przewieźć 4 palety 100x80 cm o wysokości 2 metry odbiór 42-445 Szczekociny dostawa 34-442 Łapsze Niżne"
+    "prompt":  "Proszę o cenę transportu :
+Data załadunku – 04.06.
+Data dostawy – 04.06.-05.06.
+Boks kasowy -1 szt.
+(wymiary dla jednej sztuki) długość 1500/ szerokość 1200/ wysokość 900
+waga 1 sztuki - 70 kg
+Adres Załadunku : Wróżewy 39, 63-700
+Adres Wysyłki :
+Market
+ul. Bolesława Liczanowskiego 20
+30-534 Kraków"
 }
 
 ### Przykład 4: Transport z obsługą załadunku
