@@ -61,10 +61,11 @@ async def parse_transport_request(
         dest = parsed_data.get("delivery_postal_code")
 
         # Sprawdź, czy transport jest krajowy i popraw kody pocztowe, jeśli trzeba
-        if parsed_data.get("route_type", "").lower() == "krajowy":
-            origin = check_post_code(origin)
-            dest = check_post_code(dest)
+        origin = check_post_code(origin)
+        parsed_data["pickup_postal_code"] = origin
 
+        dest = check_post_code(dest)
+        parsed_data["delivery_postal_code"] = dest
 
         if origin and dest:
             parsed_data["distance_km"] = round(get_distance_osm(origin, dest), 1)
